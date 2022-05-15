@@ -8,11 +8,13 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/rickyananda1/golang_gin_gorm_JWT/dto"
+	"github.com/rickyananda1/golang_gin_gorm_JWT/entity"
 	"github.com/rickyananda1/golang_gin_gorm_JWT/helper"
 	"github.com/rickyananda1/golang_gin_gorm_JWT/service"
 )
 
 type UserController interface {
+	All(context *gin.Context)
 	Update(context *gin.Context)
 	Profile(context *gin.Context)
 }
@@ -27,6 +29,12 @@ func NewUserController(userService service.UserService, jwtService service.JWTSe
 		userService: userService,
 		jwtService:  jwtService,
 	}
+}
+
+func (c *userController) All(context *gin.Context) {
+	var users []entity.User = c.userService.All()
+	res := helper.BuildResponse(true, "OK", users)
+	context.JSON(http.StatusOK, res)
 }
 
 func (c *userController) Update(context *gin.Context) {
