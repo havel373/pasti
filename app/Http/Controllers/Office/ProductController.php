@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use Exception;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Database\Eloquent\Collection;
@@ -193,45 +194,92 @@ class ProductController extends Controller
                 ]);
             }
         }
+        $id = (int) $request->id;
         $data = Http::get("127.0.0.1:8001/api/produks/{$product}")->json(['data']);
         $item = (object) $data;
-        if (request()->file('photo')) {
-            Storage::delete($item->photo);
-            $file = request()->file('photo')->store("product");
-            $store = Http::put("127.0.0.1:8001/api/produks/{$product}", [
-                "id" => $request->id,
-                "name" => Str::title($request->name),
-                "weight" => $request->weight,
-                "description" => $request->description,
-                "price" => Str::of($request->price)->replace(',', '') ?: 0,
-                "stock" => Str::of($request->stock)->replace(',', '') ?: 0,
-                "photo" => $file,
-                'user_id' => 1
-            ]);
-        }else{
-            $store = Http::put("127.0.0.1:8001/api/produks/{$product}", [
-                "id" => $request->id,
-                "name" => Str::title($request->name),
-                "weight" => $request->weight,
-                "description" => $request->description,
-                "price" => Str::of($request->price)->replace(',', '') ?: 0,
-                "stock" => Str::of($request->stock)->replace(',', '') ?: 0,
-                'user_id' => 1
-            ]);
-        }
-        dd($store->getStatusCode());
-        if($store->getStatusCode() == 200){
+        try {
+            $client = new Client([
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'apikey'=> config('app._api_key'),
+                    'debug' => true
+                    ]
+                ]);
+            $url =  "127.0.0.1:8001/api/produks/{$product}";
+            if (request()->file('photo')) {
+                Storage::delete($item->photo);
+                $file = request()->file('photo')->store("product");
+                $body["id"] = $id;
+                $body["name"] = Str::title($request->name);
+                $body["weight"] = $request->weight;
+                $body["description"] = $request->description;
+                $body["price"] = Str::of($request->price)->replace(',', '') ?: 0;
+                $body["stock"] = Str::of($request->stock)->replace(',', '') ?: 0;
+                $body["photo"] = $file;
+                $body["user_id"] = 1;
+                $body=json_encode($body);
+                $response = $client->request('PATCH',$url,['body'=>$body]);
+                $URI_Response =json_decode($response->getBody(), true);
+                if($response->getStatusCode() == 200){
+                    return response()->json([
+                        'alert' => 'success',
+                        'message' => 'Produk ' . $request->name . ' diubah',
+                        'response' => $response->getStatusCode(),
+                    ]);
+                }
+                if ($response->getStatusCode() != 200) {
+                    return response()->json([
+                        'alert' => 'error',
+                        'message' => 'request failed',
+                        'response' => $response->getStatusCode(),
+                    ]);
+                }
+            }else{
+                $body["id"] = $id;
+                $body["name"] = Str::title($request->name);
+                $body["weight"] = $request->weight;
+                $body["description"] = $request->description;
+                $body["price"] = Str::of($request->price)->replace(',', '') ?: 0;
+                $body["stock"] = Str::of($request->stock)->replace(',', '') ?: 0;
+                $body["photo"] = $request->photo2;
+                $body["user_id"] = 1;
+                $body=json_encode($body);
+                $response = $client->request('PATCH',$url,['body'=>$body]);
+                $URI_Response = json_decode($response->getBody(), true);
+                if($response->getStatusCode() == 200){
+                    return response()->json([
+                        'alert' => 'success',
+                        'message' => 'Produk ' . $request->name . ' diubah',
+                        'response' => $response->getStatusCode(),
+                    ]);
+                }
+                if ($response->getStatusCode() != 200) {
+                    return response()->json([
+                        'alert' => 'error',
+                        'message' => 'request failed',
+                        'response' => $response->getStatusCode(),
+                    ]);
+                }
+            }
+        } catch (ConnectException $e) {
             return response()->json([
-                'alert' => 'success',
-                'message' => 'Product ' . $request->name . ' stored',
-                'response' => $store->getStatusCode(),
+                'alert' => 'error',
+                'message' => 'Service gagal terkoneksi', 
+                'response' => $e
+            ]);
+        } catch (RequestException $e) {
+            if ($e->hasResponse()){
+                if ($e->getResponse()->getStatusCode() == '400') {
+                        echo "Got response 400" . dd($e);
+                }
+            }
+        }catch (Exception $e) {
+            return response()->json([
+                'alert' => 'error',
+                'message' => 'Service sedang bermasalah', 
+                'response' => $e
             ]);
         }
-        return response()->json([
-            'alert' => 'error',
-            'message' => 'request failed',
-            'response' => $store->getStatusCode(),
-        ]);
     }
     public function destroy($product)
     {

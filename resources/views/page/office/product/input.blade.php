@@ -111,9 +111,9 @@
                                     </div>
                                     <div class="col-lg-12">
                                         <label class="form-label fs-6 fw-bolder text-gray-700 mb-3">Photo</label>
-                                        <!--begin::Input group-->
+                                        <input type="hidden" name="photo2" value="{{$product->photo}}">
                                         <div class="mb-5">
-                                            <input type="file" name="photo" accept=".png, .jpg, .jpeg" class="form-control form-control-solid" placeholder="Photo" />
+                                            <input type="file" name="photo" accept=".png, .jpg, .jpeg" class="form-control form-control-solid" placeholder="Photo" value="{{$product->photo}}"/>
                                         </div>
                                         <!--end::Input group-->
                                     </div>
@@ -122,7 +122,7 @@
                                 <!--end::Row-->
                                 <!--begin::Button-->
                                 <div class="mb-0">
-                                    <button id="tombol_simpan" onclick="handle_upload('#tombol_simpan','#form_input','{{route('office.product.update',$product->id)}}','PUT');" class="btn btn-light-primary">Save</button>
+                                    <button id="tombol_simpan" onclick="handle_upload('#tombol_simpan','#form_input','{{route('office.product.update',$product->id)}}','PATCH');" class="btn btn-light-primary">Save</button>
                                 </div>
                                 <!--end::Button-->
                             </div>
