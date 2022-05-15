@@ -23,9 +23,6 @@ function validate_address(){
     select_ekspedisi= $('#select_ekspedisi').val();
 
     if( address.length  > 0 && 
-        province.length > 0 && 
-        city.length > 0 && 
-        subdistrict && 
         postcode.length > 0 &&
         select_service.length > 0 &&
         select_ekspedisi.length > 0) {

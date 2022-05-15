@@ -14,7 +14,6 @@ type UserRepository interface {
 	VerifyCredential(email string, password string) interface{}
 	IsDuplicateEmail(email string) (tx *gorm.DB)
 	FindByEmail(email string) entity.User
-	AllUser() []entity.User
 	ProfileUser(userID string) entity.User
 }
 
@@ -68,7 +67,7 @@ func (db *userConnection) FindByEmail(email string) entity.User {
 
 func (db *userConnection) ProfileUser(userID string) entity.User {
 	var user entity.User
-	db.connection.Preload("Users").Preload("Users.User").Find(&user, userID)
+	db.connection.Preload("Books").Preload("Books.User").Find(&user, userID)
 	return user
 }
 
@@ -79,10 +78,4 @@ func hashAndSalt(pwd []byte) string {
 		panic("Failed to hash a password")
 	}
 	return string(hash)
-}
-
-func (db *userConnection) AllUser() []entity.User {
-	var user []entity.User
-	db.connection.Preload("Users").Find(&user)
-	return user
 }

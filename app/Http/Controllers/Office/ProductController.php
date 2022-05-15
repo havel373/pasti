@@ -194,9 +194,9 @@ class ProductController extends Controller
                 ]);
             }
         }
-        $id = (int) $request->id;
         $data = Http::get("127.0.0.1:8001/api/produks/{$product}")->json(['data']);
         $item = (object) $data;
+        $id = (int) $request->id;
         try {
             $client = new Client([
                 'headers' => [
@@ -220,6 +220,7 @@ class ProductController extends Controller
                 $body=json_encode($body);
                 $response = $client->request('PATCH',$url,['body'=>$body]);
                 $URI_Response =json_decode($response->getBody(), true);
+                // dd($response->getStatusCode());
                 if($response->getStatusCode() == 200){
                     return response()->json([
                         'alert' => 'success',
@@ -246,6 +247,7 @@ class ProductController extends Controller
                 $body=json_encode($body);
                 $response = $client->request('PATCH',$url,['body'=>$body]);
                 $URI_Response = json_decode($response->getBody(), true);
+                // dd($response->getStatusCode());
                 if($response->getStatusCode() == 200){
                     return response()->json([
                         'alert' => 'success',
@@ -274,8 +276,7 @@ class ProductController extends Controller
                 }
             }
         }catch (Exception $e) {
-            return response()->json([
-                'alert' => 'error',
+            return response()->json(['alert' => 'error',
                 'message' => 'Service sedang bermasalah', 
                 'response' => $e
             ]);
@@ -291,7 +292,7 @@ class ProductController extends Controller
                 'alert' => 'success',
                 'message' => 'Product ' . $data['name'] . ' Deleted',
             ]);
-        } catch (ConnectException $e) {
+         } catch (ConnectException $e) {
             return response()->json([
                 'alert' => 'error',
                 'message' => 'Service gagal terkoneksi', 

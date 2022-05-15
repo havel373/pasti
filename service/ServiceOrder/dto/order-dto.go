@@ -21,7 +21,7 @@ type OrderCreateDTO struct {
 	Postcode  string `json:"postcode" form:"postcode" binding:"required"`
 	Photo     string `json:"photo" form:"photo" binding:"required"`
 	Status    string `json:"status" form:"status" binding:"required"`
-	Resi      string `json:"resi" form:"resi" binding:"required"`
+	Resi      string `json:"resi" form:"resi" `
 	Ongkir    string `json:"ongkir" form:"ongkir" binding:"required"`
 	Total     string `json:"total" form:"total" binding:"required"`
 	Notes     string `json:"notes" form:"notes" binding:"required"`

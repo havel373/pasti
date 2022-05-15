@@ -43,6 +43,7 @@ Route::group(['domain' => ''], function() {
         //     Route::get('profile',[AuthController::class, 'profile'])->name('auth.profile');
         //     Route::get('profile/{user:id}/edit',[AuthController::class, 'edit_profile'])->name('auth.edit');
         //     Route::post('profile/{user}/update',[AuthController::class, 'update_profile'])->name('auth.update');
+                Route::get('checkout/create/{product}', [CheckoutController::class, 'create'])->name('checkout.create');
                 Route::get('logout',[AuthController::class, 'do_logout'])->name('auth.logout');
                 Route::post('checkout/add', [CheckoutController::class, 'add'])->name('checkout.add');
                 Route::post('checkout', [CheckoutController::class, 'checkout'])->name('checkout.store');

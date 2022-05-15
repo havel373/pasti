@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
 class CheckoutController extends Controller
@@ -26,48 +27,83 @@ class CheckoutController extends Controller
     public function index()
     {
         return view('page.web.checkout.main');
-        // try {
-        //     $arr = Http::get("127.0.0.1:8001/api/orders")->json();
-        //     dd($arr);
-        //     $product = $arr['data'];
-        //     $collection = Collection::make($arr);
-        // } catch (ConnectException $e) {
-        //     dd($e);
-        //     return view('errors.503');
-        // } catch (RequestException $e) {
-        //     if ($e->hasResponse()){
-        //         if ($e->getResponse()->getStatusCode() == '400') {
-        //                 echo "Got response 400" ;
-        //         }
-        //     }
-        // }catch (Exception $e) {
-        //     dd($e);
-        //     return view('errors.503');
-        // }
     }
+
+    public function create(Request $request , $id){
+        try {
+            $arr = Http::get("127.0.0.1:8001/api/produks/{$id}");
+            $arr = json_decode($arr);
+            $product = $arr->data;
+            $quantity = $request->quantity;
+            if($product->stock < $quantity) {
+                Session::flash('message', "Stok tidak mencukupi");
+                return Redirect::back();
+            }
+            return view('page.web.checkout.form',compact('product', 'quantity'));
+        } catch (ConnectException $e) {
+            return view('errors.503');
+        } catch (RequestException $e) {
+            if ($e->hasResponse()){
+                if ($e->getResponse()->getStatusCode() == '400') {
+                        echo "Got response 400" ;
+                }
+            }
+        }catch (Exception $e) {
+            return view('errors.503');
+        }
+    }
+
     public function add(Request $request){
-        $product = (int) $request->product;
-        // dd($product);
-        $id = (int) Session::get('id');
+        try {
+            $arr = Http::get("127.0.0.1:8001/api/produks/{$request->product_id}");
+            $arr = json_decode($arr);
+            $produk = $arr->data;
+        } catch (ConnectException $e) {
+            // dd($e);
+        } catch (Exception $e) {
+            // return $e;
+            // dd($e);
+        }
+        $request->total;
+        $qty = $produk->stock - $request->total;
+        $product_ids = (int) $request->product_id;
+        $store = Http::patch("127.0.0.1:8001/api/produks/{$request->product_id}", [
+            "id" => $product_ids,
+            "stock" => $qty
+        ]);
+        dd($store->getStatusCode());
+        $product = (int) $request->product_id;
+        $id = (int) $request->user_id;
         try {
             $client = new Client([
                 'headers' => [
                     'Content-Type' => 'application/json',
                     'apikey'=> config('app._api_key'),
                     'debug' => true
-                ]
-            ]);
+                    ]
+                ]);
+            $file = request()->file('photo')->store("bukti_tf");
             $url =  'http://127.0.0.1:8003/api/orders';
-            $body['user_id'] = $id;
-            $body['product_id']= $product;
-            $body['address']='jalanan';
-            $body['postcode']='23123';
-            $body['photo']='test.png';
-            $body['status']='waiting';
-            $body['resi']='12321321321';
-            $body['ongkir']='250000';
-            $body['total']='3';
-            $body['notes']='cepat';
+            $body['user_id'] = $product;
+            $body['product_id']= $id;
+            $body['address']= $request->address;
+            $body['postcode']= $request->postcode;
+            $body['photo']= $file;
+            $body['status']= 'waiting';
+            // $body['resi']= '12321321321';
+            $body['ongkir']= '20000';
+            $body['total']= $request->total;
+            $body['notes']= $request->notes;
+            // $body['user_id'] = $id;
+            // $body['product_id']= $product;
+            // $body['address']= $request->address;
+            // $body['postcode']= $request->postcode;
+            // $body['photo']= $file;
+            // $body['status']= 'waiting';
+            // $body['resi']= '12321321321';
+            // $body['ongkir']= '20000';
+            // $body['total']= $request->total;
+            // $body['notes']= $request->notes;
             $body=json_encode($body);
             $response = $client->request('POST',$url,['body'=>$body]);
             $URI_Response =json_decode($response->getBody(), true);
@@ -100,6 +136,7 @@ class CheckoutController extends Controller
                     'alert' => 'success',
                     'message' => 'Produk ' . $request->name . ' ditambahkan',
                     'response' => $response->getStatusCode(),
+                    'redirect' => route('web.home')
                 ]);
             }
             if ($response->getStatusCode() != 200) {

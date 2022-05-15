@@ -11,7 +11,6 @@ import (
 
 type UserService interface {
 	Update(user dto.UserUpdateDTO) entity.User
-	All() []entity.User
 	Profile(userID string) entity.User
 }
 
@@ -33,10 +32,6 @@ func (service *userService) Update(user dto.UserUpdateDTO) entity.User {
 	}
 	updateUser := service.userRepository.UpdateUser(userToUpdate)
 	return updateUser
-}
-
-func (service *userService) All() []entity.User {
-	return service.userRepository.AllUser()
 }
 
 func (service *userService) Profile(userID string) entity.User {

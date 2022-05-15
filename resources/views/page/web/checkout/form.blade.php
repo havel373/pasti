@@ -10,6 +10,9 @@
                                     <h3>Billing Address</h3>
                                     <div class="row mb-0">
                                         <div class="col-md-6 form-group">
+                                            <input type="hidden" name="product_id" value="{{$product->id}}">
+                                            <input type="hidden" name="total" value="{{$quantity}}">
+                                            <input type="hidden" name="user_id" value="{{Session::get('id')}}">
                                             <label for="billing-form-name">Nama:</label>
                                             <input type="text" name="name" value="{{Session::get('name')}}" class="sm-form-control" />
                                         </div>
@@ -21,6 +24,28 @@
                                         <div class="col-md-6 form-group">
                                             <label for="billing-form-phone">Nomer Telphone:</label>
                                             <input type="text" name="phone" value="{{Session::get('phone')}}" class="sm-form-control" />
+                                        </div>
+                                        <div class="col-md-6 form-group">
+                                            <div class="product col-12 col-sm-6 col-lg-12">
+                                                <div class="grid-inner row g-0">
+                                                    <div class="product-image col-lg-12 col-xl-12">
+                                                        <a href="#"><img src="{{asset('storage/' . $product->photo)}}" alt="{{$product->name}}"></a>
+                                                        <a href="#"><img src="{{asset('storage/' . $product->photo)}}" alt="{{$product->name}}"></a>
+                                                    </div>
+                                                    <div class="product-desc col-lg-12 col-xl-12 px-lg-12 pt-lg-0">
+                                                        <div class="product-title"><h3><a href="#">{{$product->name}}</a></h3></div>
+                                                        <div class="product-price">Jumlah {{($quantity)}}</div>
+                                                        <div class="product-price">Rp. {{number_format($product->price * $quantity)}}</div>
+                                                        @php
+                                                            $total = $product->price * $quantity;
+                                                        @endphp
+                                                        <ul class="iconlist d-none d-xl-block mt-md-3">
+                                                            <li><i class="icon-caret-right"></i> {{$product->description}}</li>
+                                                            <li><i class="icon-caret-right"></i> Weight : {{$product->weight}} grams</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -38,7 +63,7 @@
                                         </div>
                                         <div class="col-6 form-group">
                                             <label for="postcode">Courier</label>
-                                            <select class="form-control" name="ekspedisi" onchange="getOngkir()" id="select_ekspedisi">
+                                            <select class="form-control" name="ekspedisi" id="select_ekspedisi">
                                                 <option value="">Pilih Courier</option>
                                                 <option value="jne">JNE</option>
                                                 <option value="lion">Lion Parcel</option>
@@ -60,67 +85,13 @@
                             </div>
                             <div class="row">
                                 <div class="col-lg-6">
-                                    <button type="button" class="btn btn-primary"onclick="payment_content('order_content')">Kembali</button>
+                                    <button type="button" class="btn btn-primary"onclick="history.back();">Kembali</button>
                                     <button type="button" class="btn btn-primary" onclick="validate_address();">Beli</button>   
                                 </div>
                             </div>
                         </div>
 
                         <div class="w-100"></div>
-
-                        <div id="order_content" class="col-lg-12">
-                            <h4>Your Orders</h4>
-                            @php
-                            $total_harga = 0;
-                            $berat = 0;
-                            @endphp
-                            <div class="table-responsive">
-                                <table class="table cart">
-                                    <thead>
-                                        <tr>
-                                            <th class="cart-product-thumbnail">&nbsp;</th>
-                                            <th class="cart-product-name">Product</th>
-                                            <th class="cart-product-quantity">Quantity</th>
-                                            <th class="cart-product-subtotal">Total</th>
-                                        </tr>
-                                    </thead>
-                                    {{-- <tbody>
-                                        @foreach ($collection as $item)
-                                        @php
-                                        $price = "price_".$item->type;
-                                        $subtotal = $item->product->$price * $item->qty;
-                                        $berat += $item->product->berat * $item->qty;
-                                        $total_harga += $item->product->$price * $item->qty;
-                                        @endphp
-
-                                        <tr class="cart_item">
-                                            <td class="cart-product-thumbnail">
-                                                <a href="{{route('user.product.show',$item->product->slug)}}">
-                                                    <img width="64" height="64" src="{{$item->product->image}}" alt="{{$item->product->titles}}">
-                                                </a>
-                                            </td>
-
-                                            <td class="cart-product-name">
-                                                <a href="{{route('user.product.show',$item->product->slug)}}">{{$item->product->titles}} | {{Str::title($item->type)}}</a>
-                                            </td>
-
-                                            <td class="cart-product-quantity">
-                                                <div class="quantity clearfix">
-                                                    {{number_format($item->qty)}}
-                                                </div>
-                                            </td>
-
-                                            <td class="cart-product-subtotal">
-                                                <span class="amount">Rp. {{number_format($subtotal)}}</span>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                        <input type="hidden" name="berat" id="berat" value="{{$berat}}">
-                                    </tbody> --}}
-                                </table>
-                                {{-- <button type="button" class="btn btn-primary" onclick="payment_content('address_content');">Bayar</button> --}}
-                            </div>
-                        </div>
 
                         <div class="col-lg-12" id="payment_content">
                             <h4>Cart Totals</h4>
@@ -141,8 +112,8 @@
                                                 <strong>Subtotal</strong>
                                             </td>
                                             <td class="cart-product-name">
-                                                <input type="hidden" id="subtotal_input" value="{{$total_harga}}">
-                                                <span id="subtotal" class="amount color lead">Rp. <strong>{{number_format($total_harga)}}</strong></span>
+                                                <input type="hidden" id="subtotal_input" value="{{$total}}">
+                                                <span id="subtotal" class="amount color lead">Rp. <strong>{{number_format($total)}}</strong></span>
                                             </td>
                                         </tr>
                                         <tr class="cart_item">
@@ -150,7 +121,7 @@
                                                 <strong>Grandtotal</strong>
                                             </td>
                                             <td class="cart-product-name">
-                                                <span id="grandtotal" class="amount color lead">Rp. <strong>{{number_format($total_harga)}}</strong></span>
+                                                <span id="grandtotal" class="amount color lead">Rp. <strong>{{number_format($total + 20000)}}</strong></span>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -174,9 +145,9 @@
                                     Bukti transfer maksimal 1x24 jam
                                 </div>
                                 <div class="w-100"></div>
-                                <input name="photo" type="file" accept="image/*" class="file-loading image_picker" data-allowed-file-extensions='[]' data-show-preview="false">
+                                <input name="photo" type="file" accept="image/*" class="form-control image_picker" data-allowed-file-extensions='[]'>
                             </div>
-                            <button id="tombol_checkout" onclick="handle_upload('#tombol_checkout','#form_checkout','{{route('web.checkout.store')}}','POST','Place Order')" class="button button-3d float-end">Place Order</button>
+                            <button id="tombol_checkout" onclick="handle_upload('#tombol_checkout','#form_checkout','{{route('web.checkout.add')}}','POST','Place Order')" class="button button-3d float-end">Place Order</button>
                         </div>
                     </div>
                 </form>
@@ -185,7 +156,7 @@
     </section>
     @section('custom_js')
     <script>
-        payment_content('order_content');
+        payment_content('address_content');
     </script>
     @endsection
 </x-user-layout>

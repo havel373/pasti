@@ -112,8 +112,9 @@
                                     <div class="col-lg-12">
                                         <label class="form-label fs-6 fw-bolder text-gray-700 mb-3">Photo</label>
                                         <input type="hidden" name="photo2" value="{{$product->photo}}">
+                                        <!--begin::Input group-->
                                         <div class="mb-5">
-                                            <input type="file" name="photo" accept=".png, .jpg, .jpeg" class="form-control form-control-solid" placeholder="Photo" value="{{$product->photo}}"/>
+                                            <input type="file" name="photo" accept=".png, .jpg, .jpeg" class="form-control form-control-solid" placeholder="Photo" />
                                         </div>
                                         <!--end::Input group-->
                                     </div>

@@ -44,8 +44,12 @@
                                 <!-- Product Single - Price End -->
                             </div>
                             <div class="line"></div>
+                            @if (Session::has('message'))
+                                <div class="alert alert-info">{{ Session::get('message') }}</div>
+                            @endif
                             <!-- Product Single - Quantity & Cart Button ============================================= -->
-                            <form id="form_cart">
+                            <form id="form_cart" action="{{route('web.checkout.create', $product->id)}}">
+                                @csrf
                                 <div class="cart mb-0 d-flex justify-content-between align-items-center">
                                     <div class="quantity clearfix">
                                         <input type="button" value="-" class="minus">
@@ -53,7 +57,7 @@
                                         <input type="button" value="+" class="plus">
                                     </div>
                                     @if(\Session::get('token'))
-                                        <button type="button" onclick="add_cart('#tombol_keranjang','#form_cart','{{route('web.checkout.add')}}','Add to Cart','{{$product->id}}');" id="tambah_keranjang" class="add-to-cart button m-0">Beli</button>
+                                        <button type="submit" id="tambah_keranjang" class="add-to-cart button m-0">Beli</button>
                                     @else
                                         <a href="{{route('web.auth.index')}}" class="add-to-cart button m-0">Beli</a>
                                     @endif
