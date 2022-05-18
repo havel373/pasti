@@ -23,6 +23,9 @@ class WebController extends Controller
     }
     public function about()
     {
-        return view('page.web.home.about');
+        $connection = new Connection;
+        $arr = $connection->gallery();
+        $collection = Collection::make($arr);
+        return view('page.web.home.about', compact('collection'));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Connection;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Cart;
@@ -26,7 +27,11 @@ class CheckoutController extends Controller
 {
     public function index()
     {
-        return view('page.web.checkout.main');
+
+        $connection = new Connection;
+        $arr = $connection->orders();
+        $collection = Collection::make($arr);
+        return view('page.web.checkout.main', compact('collection'));
     }
 
     public function create(Request $request , $id){
@@ -59,19 +64,10 @@ class CheckoutController extends Controller
             $arr = json_decode($arr);
             $produk = $arr->data;
         } catch (ConnectException $e) {
-            // dd($e);
+
         } catch (Exception $e) {
-            // return $e;
-            // dd($e);
+
         }
-        $request->total;
-        $qty = $produk->stock - $request->total;
-        $product_ids = (int) $request->product_id;
-        $store = Http::patch("127.0.0.1:8001/api/produks/{$request->product_id}", [
-            "id" => $product_ids,
-            "stock" => $qty
-        ]);
-        dd($store->getStatusCode());
         $product = (int) $request->product_id;
         $id = (int) $request->user_id;
         try {
@@ -84,57 +80,23 @@ class CheckoutController extends Controller
                 ]);
             $file = request()->file('photo')->store("bukti_tf");
             $url =  'http://127.0.0.1:8003/api/orders';
-            $body['user_id'] = $product;
-            $body['product_id']= $id;
+            $body['user_id'] = $id;
+            $body['product_id']= $product;
             $body['address']= $request->address;
             $body['postcode']= $request->postcode;
             $body['photo']= $file;
             $body['status']= 'waiting';
-            // $body['resi']= '12321321321';
+            $body['resi']= '12321321321';
             $body['ongkir']= '20000';
             $body['total']= $request->total;
             $body['notes']= $request->notes;
-            // $body['user_id'] = $id;
-            // $body['product_id']= $product;
-            // $body['address']= $request->address;
-            // $body['postcode']= $request->postcode;
-            // $body['photo']= $file;
-            // $body['status']= 'waiting';
-            // $body['resi']= '12321321321';
-            // $body['ongkir']= '20000';
-            // $body['total']= $request->total;
-            // $body['notes']= $request->notes;
             $body=json_encode($body);
             $response = $client->request('POST',$url,['body'=>$body]);
             $URI_Response =json_decode($response->getBody(), true);
-            // $arr = $client->request('POST', 'http://127.0.0.1:8003/api/orders', [
-            //     'form_params' => [
-            //        'ID' => 12,
-            //         //'user_id' => Session::get('id'),
-            //         //'product_id' => $request->product,
-            //         //'total' => $request->quantity
-            //        'user_id' => 2,
-            //        'product_id'=> 4,
-            //        'address'=>'jalanan',
-            //        'postcode'=>'23123',
-            //        'photo'=>'test.png',
-            //        'status'=>'waiting',
-            //        'resi'=>'12321321321',
-            //        'ongkir'=>'250000',
-            //        'total'=>'3',
-            //        'notes'=>'cepat'    
-            //     ],
-            //     'headers' => [
-            //         'Content-Type' => 'application/raw',
-            //     ],
-            // ]);
-        //     if ($arr->getStatusCode() != 200) {
-        //         throw new \Exception('Error with status code: ' . $arr->getStatusCode() . 'and body: ' . $arr->getBody()->getContents());
-        //       }
             if($response->getStatusCode() == 200){
                 return response()->json([
                     'alert' => 'success',
-                    'message' => 'Produk ' . $request->name . ' ditambahkan',
+                    'message' => 'Pesanan anda berhasil ditambahkan',
                     'response' => $response->getStatusCode(),
                     'redirect' => route('web.home')
                 ]);

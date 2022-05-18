@@ -14,12 +14,24 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function($request, $next){
+            $session = Session::get('admin');
+            if(!$session){
+                return response()->view('page.office.auth.main');
+            }
+            return $next($request);
+        });
+    }
+    
     public function index(Request $request)
     {
         if ($request->ajax()) {

@@ -78,11 +78,11 @@
                                 </li>
                                 @endforeach --}}
                             </ul>
-                        {{-- <li class="menu-item">
+                        <li class="menu-item">
                             <a class="menu-link" href="{{route('web.about')}}">
                                 <div>About</div>
                             </a>
-                        </li> --}}
+                        </li>
                         </li>
                     </ul>
                 </nav>

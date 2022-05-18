@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Office\AuthController;
 use App\Http\Controllers\Office\DashboardController;
 use App\Http\Controllers\Office\OrderController;
+use App\Http\Controllers\Office\CustomerController;
+use App\Http\Controllers\Office\GalleryController;
 use App\Http\Controllers\Office\ProductController;
 use App\Providers\RouteServiceProvider as ProvidersRouteServiceProvider;
 
@@ -15,25 +17,16 @@ Route::group(['domain' => ''], function() {
             Route::post('register',[AuthController::class, 'do_register'])->name('register');
         });
 
-        Route::middleware(['auth:office'])->group(function(){
-        //     Route::get('verification',[AuthController::class, 'verification'])->name('auth.verification');
-        //     Route::post('verify/{auth:email}',[AuthController::class, 'do_verify'])->name('auth.verify');
+        Route::middleware(['auth'])->group(function(){
             Route::get('logout',[AuthController::class, 'do_logout'])->name('auth.logout');
-        //     Route::post('order/pdf', [\App\Http\Controllers\Office\OrderController::class, 'pdf'])->name('order.pdf');
-        //     Route::get('order/{order}/invoice', [\App\Http\Controllers\Office\OrderController::class, 'invoice'])->name('order.invoice');
         }); 
 
-        Route::group(['middleware' => ['auth:office']], function () {
+        Route::group(['middleware' => ['auth']], function () {
             Route::redirect('/', ProvidersRouteServiceProvider::DASHBOARD, 301);
             Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-            // Route::resource('banner', BannerC::class);
-            // Route::resource('category', CategoryC::class);
+            Route::resource('banner', GalleryController::class);
             Route::resource('product', ProductController::class);
-            // Route::patch('recomendation/{id}',[RecomendedController::class,'recomendation','__invoke'])->name('product.recomendation');
-            // Route::patch('unrecomendation/{id}',[RecomendedController::class,'unrecomendation','__invoke'])->name('product.unrecomendation');
-            // Route::resource('customer', CustomerC::class);
-            // Route::get('customer/pdf', [\App\Http\Controllers\Office\CustomerController::class, 'pdf'])->name('customer.pdf');
-            // Route::resource('employee', EmployeeC::class);
+            Route::resource('user', CustomerController::class);
             Route::resource('order', OrderController::class);
             Route::get('order/{order}/download', [OrderController::class, 'download'])->name('order.download');
             Route::patch('order/{order}/reject', [OrderController::class, 'reject'])->name('order.reject');

@@ -1,38 +1,22 @@
 <x-user-layout title="About">
     <section id="content">
-        <div class="content-wrap">
-            <div class="container clearfix">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body bg-warning">
-                                <i class="icon-instagram" style="font-size:2rem;"></i>
-                                <span> 17Store.id</span>
-                            </div>
-                        </div>
+        <section id="about" class="about">
+            <div class="container" data-aos="fade-up">
+                @foreach ($collection as $item)
+                <div class="row mb-5">
+                    <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left" data-aos-delay="100">
+                        <img src="{{asset('storage/' . $item->photo)}}" alt="" width="400" height="250" style="border:0;">
                     </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body bg-warning">
-                                <i class="icon-whatsapp-square" style="font-size:2rem;"></i>
-                                <span>
-                                    0821 - 1234- 7777
-                                </span>
-                            </div>
-                        </div>
+                    <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content">
+                        <h2>{{$item->nama}}</h2>
+                        <br>
+                        <h2><i>{{$item->nim}}</i> </h2>
+                        <br>
+                        <h3>{{$item->email}}</h3>
                     </div>
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-body bg-warning">
-                                <i class="icon-map-marker1" style="font-size:2rem;"></i>
-                                <span style="font-size:0.975em;">
-                                    l. Buaran I, RT.4/RW.12, Klender, Kec. Duren Sawit, Kota Jakarta Timur, <br> Daerah Khusus Ibukota Jakarta 13470
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </div> 
+              @endforeach        
             </div>
-        </div>
+          </section>
     </section>
 </x-user-layout>

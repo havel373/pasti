@@ -53,18 +53,21 @@ class AuthController extends Controller
             }
         }
         try {
-            // $check = new Client();
-            // $url = $check->request('POST','127.0.0.1:8002/api/auth/login', [
-            //     'email' => $request->email,
-            //     'password'  => $request->password,
-            //     'role' => 'user'
-            // ]);
+
             $check = Http::post("127.0.0.1:8002/api/auth/login",[
                 'email' => $request->email,
                 'password'  => $request->password,
                 'role' => 'user'
             ]);
             if($check->getStatusCode() == 200){
+                $role = json_decode($check->getBody())->data->role;
+                if($role != 'user'){
+                    return response()->json([
+                        'alert' => 'error',
+                        'message' => 'Akun anda bukan user!', 
+                        'response' => $check->getStatusCode(),
+                    ]);
+                }
                 $collection = json_decode($check->getBody());
                 Session::put('token' , $collection->data->token);
                 Session::put('id' , $collection->data->id);
@@ -76,7 +79,8 @@ class AuthController extends Controller
                     'alert' => 'success',
                     'message' => 'Selamat Datang Kembali ' . $collection->data->name, 
                     'response' => $check->getStatusCode(),
-                    'session' => Session::get('token')
+                    'session' => Session::get('token'),
+                    'route' => route('web.home'),
                 ]);
             }
             if($check->getStatusCode() == 400 || $check->getStatusCode() == 401){
@@ -86,34 +90,7 @@ class AuthController extends Controller
                     'response' => $check->getStatusCode(),
                 ]);
             }
-            // try {
-            //     if (! $token = JWTAuth::attempt($check)) {
-            //         return response()->json([
-            //         	'success' => false,
-            //         	'message' => 'Login credentials are invalid.',
-            //         ], 400);
-            //     }
-            // } catch (JWTException $e) {
-            // return $check;
-            //     return response()->json([
-            //         	'success' => false,
-            //         	'message' => 'Could not create token.',
-            //         ], 500);
-            // }
-        
-            //Token created, return with success response and jwt token
-            // return response()->json([
-            //     'success' => true,
-            //     'token' => $token,
-            // ]);
-            // dd($check->getStatusCode());
-            // if($check->getStatusCode() == 403 || $check->getStatusCode() == 401){
-            //     return response()->json([
-            //         'alert' => 'error',
-            //         'message' => 'Unauthorized ',
-            //         'response' => $check->getStatusCode(),
-            //     ]);
-            // }
+           
         } catch (ConnectException $e) {
             return response()->json([
                 'alert' => 'error',
@@ -175,12 +152,12 @@ class AuthController extends Controller
                 'phone' => $request->phone,
                 'role' => 'user',
             ]);
-
             if($req->getStatusCode() == 500 || $req->getStatusCode() == 404 || $req->getStatusCode() == 403) {
                     return response()->json([
                         'alert' => 'error',
                         'message' => 'request failed',
                         'response' => $req->getStatusCode(),
+                        'route' => route('web.auth.index'),
                     ]);
             }
             return response()->json([
@@ -209,98 +186,6 @@ class AuthController extends Controller
         }
     }
 
-    public function profile(Request $request)
-    {
-        if ($request->ajax()) {
-            $token = Auth::user()->id;
-            $keywords = $request->keywords;
-            $collection = Order::where('user_id', $token)
-                ->orderBy('id', 'DESC')
-                ->paginate(10);
-            return view('page.web.auth.list', compact('collection'));
-        }
-        return view('page.web.auth.profile');
-    }
-    public function edit_profile(User $user)
-    {
-        $provinsi= Province::get();
-        return view('page.web.auth.edit', compact('user','provinsi'));
-    }
-    public function update_profile(Request $request, User $user)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|max:255',
-            'phone' => 'required|min:9|max:15',
-            'address' => 'required',
-            'province' => 'required',
-            'city' => 'required',
-            'subdistrict' => 'required',
-            'photo' => 'required',
-        ]);
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            if ($errors->has('name')) {
-                return response()->json([
-                    'alert' => 'error',
-                    'message' => $errors->first('name'),
-                ]);
-            } elseif ($errors->has('email')) {
-                return response()->json([
-                    'alert' => 'error',
-                    'message' => $errors->first('email'),
-                ]);
-            } elseif ($errors->has('phone')) {
-                return response()->json([
-                    'alert' => 'error',
-                    'message' => $errors->first('phone'),
-                ]);
-            } elseif ($errors->has('address')) {
-                return response()->json([
-                    'alert' => 'error',
-                    'message' => $errors->first('address'),
-                ]);
-            }
-             elseif ($errors->has('province')) {
-                return response()->json([
-                    'alert' => 'error',
-                    'message' => $errors->first('province'),
-                ]);
-            } elseif ($errors->has('city')) {
-                return response()->json([
-                    'alert' => 'error',
-                    'message' => $errors->first('city'),
-                ]);
-            } elseif ($errors->has('subdistrict')) {
-                return response()->json([
-                    'alert' => 'error',
-                    'message' => $errors->first('subdistrict'),
-                ]);
-            }
-        }
-        if (request()->file('photo')) {
-            Storage::delete($user->photo);
-            $file = request()->file('photo')->store("user");
-            $user->photo = $file;
-        }
-        $user->name = Str::title($request->name);
-        $user->email = $request->email;
-        $user->phone = $request->phone;
-        $user->address = $request->address;
-        $user->province_id = $request->province;
-        $user->city_id = $request->city;
-        $user->subdistrict_id = $request->subdistrict;
-        $user->postcode = $request->postcode;
-        $user->username = Str::before($request->email, '@');
-        if ($request->password) {
-            $user->password = Hash::make($request->password);
-        }
-        $user->update();
-        return response()->json([
-            'alert' => 'success',
-            'message' => 'Profile Updated',
-        ]);
-    }
     public function do_logout(Request $request)
     {
         $request->session()->flush();

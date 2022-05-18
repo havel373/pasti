@@ -1,0 +1,456 @@
+{
+	"info": {
+		"_postman_id": "4588c10d-86fb-43c5-b2ec-5da37aa97ebc",
+		"name": "Microservice PASTI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "ALL",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:8001/api/produks",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8001",
+							"path": [
+								"api",
+								"produks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Store",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"celana\",\r\n    \"weight\": \"121\",\r\n    \"description\": \"bagus\",\r\n    \"stock\": \"18\",\r\n    \"photo\": \"test.png\",\r\n    \"price\": \"320000\",\r\n    \"user_id\": 1\r\n}\r\n\r\n{\r\n    \"name\" : \"baju\",\r\n    \"weight\": \"212\",\r\n    \"description\": \"mantap\",\r\n    \"stock\": \"18\",\r\n    \"photo\": \"test.png\",\r\n    \"price\": \"220000\",\r\n    \"user_id\": 1\r\n}\r\n\r\n{\r\n    \"name\" : \"Celana dalam\",\r\n    \"weight\": \"281\",\r\n    \"description\": \"ok\",\r\n    \"stock\": \"92\",\r\n    \"photo\": \"test.png\",\r\n    \"price\": \"920000\",\r\n    \"user_id\": 1\r\n}\r\n\r\n{\r\n    \"name\" : \"selimut\",\r\n    \"weight\": \"11\",\r\n    \"description\": \"nggatau\",\r\n    \"stock\": \"32\",\r\n    \"photo\": \"test.png\",\r\n    \"price\": \"820000\",\r\n    \"user_id\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:8001/api/produks",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8001",
+							"path": [
+								"api",
+								"produks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\" : 14,\r\n    \"name\" : \"Baju sahaja\",\r\n    \"weight\": \"25\",\r\n    \"description\": \"baru\",\r\n    \"stock\": \"2\",\r\n    \"photo\": \"test.png\",\r\n    \"price\": \"250000\",\r\n    \"user_id\" : 1,\r\n    \"created_at\": \"2022-05-14 22:50:46\",\r\n    \"updated_at\": \"2022-05-14 22:50:46\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:8001/api/produks/14",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8001",
+							"path": [
+								"api",
+								"produks",
+								"14"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:8001/api/produks/5",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8001",
+							"path": [
+								"api",
+								"produks",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:8001/api/produks/1",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8001",
+							"path": [
+								"api",
+								"produks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Regist",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Yanti Hutasoit\",\r\n    \"email\": \"yanti@gmail.com\",\r\n    \"password\": \"132456789\",\r\n    \"role\": \"user\",\r\n    \"phone\": \"087628910982\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:8002/api/auth/register",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8002",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"yanti@gmail.com\",\r\n    \"password\": \"132456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:8002/api/auth/login",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8002",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "ALL",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:8003/api/orders",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8003",
+							"path": [
+								"api",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Store",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\" : 1,\r\n    \"user_id\" : 2,\r\n    \"product_id\": 4,\r\n    \"address\": \"jalanan\",\r\n    \"postcode\": \"23123\",\r\n    \"photo\": \"test.png\",\r\n    \"status\": \"waiting\",\r\n    \"resi\": \"12321321321\",\r\n    \"ongkir\": \"250000\",\r\n    \"total\": \"3\",\r\n    \"notes\": \"cepat\"    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:8003/api/orders",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8003",
+							"path": [
+								"api",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Gallery",
+			"item": [
+				{
+					"name": "ALL",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8004/api/gallery",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8004",
+							"path": [
+								"api",
+								"gallery"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "nama",
+									"value": "tesa",
+									"type": "text"
+								},
+								{
+									"key": "nim",
+									"value": "11320012",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "tesa@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "photo",
+									"value": "image.jpeg",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8004/api/gallery",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8004",
+							"path": [
+								"api",
+								"gallery"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "nama",
+									"value": "havel situmorang",
+									"type": "text"
+								},
+								{
+									"key": "nim",
+									"value": "11320011",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "pakhomioshavel@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "photo",
+									"value": "image.jpeg",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8004/api/gallery/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8004",
+							"path": [
+								"api",
+								"gallery",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8004/api/gallery/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8004",
+							"path": [
+								"api",
+								"gallery",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8004/api/gallery/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8004",
+							"path": [
+								"api",
+								"gallery",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

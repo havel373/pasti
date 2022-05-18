@@ -48,7 +48,7 @@
                             @endforeach
 
                             @else
-                                @include('errors.503')
+                                @include('errors.nodata')
                                 {{-- @extends('errors.illustrated-layout')
 
                                 @section('title', __('Server Error'))

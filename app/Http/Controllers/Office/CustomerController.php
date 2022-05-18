@@ -2,23 +2,46 @@
 
 namespace App\Http\Controllers\Office;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Http\Controllers\Connection;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Order;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use PDF;
 
 class CustomerController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function($request, $next){
+            $session = Session::get('admin');
+            // dd($session);
+            if(!$session){
+                return response()->view('page.office.auth.main');
+            }
+            return $next($request);
+        });
+    }
+
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $keywords = $request->keywords;
-            $collection = User::where('role','!=','Admin')
-            ->where('name','like','%'.$keywords.'%')
-            ->paginate(10);
+            $connection = new Connection;
+            $arr = $connection->users();
+            $collection = Collection::make($arr);
+            // $start = $request->start;
+            // $end = $request->end;
+            // $st = $request->st;
+            // $collection = Order::whereBetween(DB::raw('date(created_at)'), [$start, $end])
+            // ->where('st', $st)
+            // ->orderBy('id','DESC')
+            // ->paginate(10);
             return view('page.office.customer.list', compact('collection'));
         }
         return view('page.office.customer.main');
@@ -102,10 +125,5 @@ class CustomerController extends Controller
             'alert' => 'success',
             'message' => 'Customer '. $user->titles . ' Deleted',
         ]);
-    }
-    public function pdf()
-    {
-        $pdf = PDF::loadview('page.office.customer.list')->setPaper('A4','potrait');
-        return $pdf->stream();
     }
 }

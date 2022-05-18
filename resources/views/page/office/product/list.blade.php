@@ -89,5 +89,5 @@
     </table>
     {{-- {{$collection->links()}} --}}
 @else
-    @include('errors.503')
+    @include('errors.nodata')
 @endif

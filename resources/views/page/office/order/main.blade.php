@@ -1,4 +1,4 @@
-<x-office-layout title="Category">
+<x-office-layout title="Order">
     <div id="content_list">
         <!--begin::Toolbar-->
         <div class="toolbar" id="kt_toolbar">

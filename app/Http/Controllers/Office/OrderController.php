@@ -10,11 +10,24 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use PDF;
 
 class OrderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function($request, $next){
+            $session = Session::get('admin');
+            // dd($session);
+            if(!$session){
+                return response()->view('page.office.auth.main');
+            }
+            return $next($request);
+        });
+    }
+
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -31,9 +44,6 @@ class OrderController extends Controller
             return view('page.office.order.list', compact('collection'));
         }
         return view('page.office.order.main');
-    }
-    public function show()
-    {
     }
     public function edit(Order $order)
     {
@@ -72,45 +82,5 @@ class OrderController extends Controller
             'message' => 'Payment accepted',
         ]);
     }
-    public function download(Order $order)
-    {
-        $extension = Str::of($order->photo)->explode('.');
-        return Storage::download($order->photo, 'order-'.$order->created_at.'.'.$extension[1]);
-    }
 
-    public function pdf(Request $request)
-    {  
-        $validator = Validator::make($request->all(), [
-            'starts' => 'required',
-            'ends' =>   'required',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            if ($errors->has('starts')) {
-                return response()->json([
-                    'alert' => 'error',
-                    'message' => $errors->first('starts'),
-                ]);
-            }elseif ($errors->has('ends')) {
-                return response()->json([
-                    'alert' => 'error',
-                    'message' => $errors->first('ends'),
-                ]);
-            }
-        }
-        $start = $request->starts;
-        $end = $request->ends;
-        $st = $request->sts;
-        $order = Order::where('st', $st)->whereBetween(DB::raw('date(created_at)'), [$start, $end])
-        ->get();
-    	$pdf = PDF::loadview('page.office.order.pdf',['order'=> $order, 'st' => $st]);
-    	return $pdf->stream('oder-report-on-process.pdf');
-    }
-    public function invoice(Order $order)
-    {  
-        $order = Order::where('id', $order->id)->first();
-    	$pdf = PDF::loadview('page.office.order.invoice',['order'=> $order]);
-    	return $pdf->stream('invoice.pdf');
-    }
 }

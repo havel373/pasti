@@ -78,7 +78,9 @@ var KTSigninGeneral = (function () {
                                                     Swal.fire({ text: response.message, icon: "success", buttonsStyling: !1, confirmButtonText: "Ok, got it!", customClass: { confirmButton: "btn btn-primary" } }).then(function (t) {
                                                         t.isConfirmed && (e.reset());
                                                     }).then(function () {
-                                                        window.location.replace(document.referrer)
+                                                        if(response.route){
+                                                            location.href = response.route;
+                                                        }
                                                     });
                                             }, 2e3);
                                         } else {
@@ -131,7 +133,6 @@ var KTSignupGeneral = (function () {
                                 callback: {
                                     message: "Please enter valid password",
                                     callback: function (e) {
-                                        // if (e.value.length > 0) return r();
                                     },
                                 },
                             },
