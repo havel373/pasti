@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Connection;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\JwtMiddleware;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -111,6 +113,22 @@ class AuthController extends Controller
             ]);
         }
     }
+
+    public function profile(Request $request)
+    {
+        if ($request->ajax()) {
+            $connection = new Connection;
+            $collection = $connection->ordersCollection();
+            $collection = $collection->where('user_id', Session::get('id'));
+            // $join = $collection->pluck('product_id')->all();
+            // $product = $connection->produksCollection();
+            // dump($product[0] , $join);die;
+            // dd($product->where(in_array($product->pluck('id')->all() , $join)));
+            return view('page.web.auth.list', compact('collection'));
+        }
+        return view('page.web.auth.profile');
+    }
+
     public function do_register(Request $request)
     {
         $validator = Validator::make($request->all(), [

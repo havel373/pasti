@@ -21,7 +21,6 @@ class CustomerController extends Controller
     {
         $this->middleware(function($request, $next){
             $session = Session::get('admin');
-            // dd($session);
             if(!$session){
                 return response()->view('page.office.auth.main');
             }
@@ -35,13 +34,6 @@ class CustomerController extends Controller
             $connection = new Connection;
             $arr = $connection->users();
             $collection = Collection::make($arr);
-            // $start = $request->start;
-            // $end = $request->end;
-            // $st = $request->st;
-            // $collection = Order::whereBetween(DB::raw('date(created_at)'), [$start, $end])
-            // ->where('st', $st)
-            // ->orderBy('id','DESC')
-            // ->paginate(10);
             return view('page.office.customer.list', compact('collection'));
         }
         return view('page.office.customer.main');

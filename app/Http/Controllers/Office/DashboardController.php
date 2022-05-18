@@ -16,7 +16,6 @@ class DashboardController extends Controller
     {
         $this->middleware(function($request, $next){
             $session = Session::get('admin');
-            // dd($session);
             if(!$session){
                 return response()->view('page.office.auth.main');
             }

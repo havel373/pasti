@@ -15,7 +15,6 @@
 </head>
 <body>
     <center>
-        {{-- <img alt="Logo" src="https://yadaekidanta.com/img/icon.png" class="w-150px" style="width:10%;" alt="error" /> --}}
 		<h3>Bukti Pembelian</h3>
 	</center>
     <br>

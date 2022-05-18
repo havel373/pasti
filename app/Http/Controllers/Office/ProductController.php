@@ -44,7 +44,6 @@ class ProductController extends Controller
     }
     public function create()
     {
-        // $arr = Http::get("127.0.0.1:8001/api/produks");
         return view('page.office.product.create');
     }
     public function store(Request $request)
@@ -110,7 +109,6 @@ class ProductController extends Controller
                 "stock" => Str::of($request->stock)->replace(',', '') ?: 0,
                 "photo" => $file,
             ]);
-            // dd($store);
             if($store->getStatusCode() == 200){
                 return response()->json([
                     'alert' => 'success',
@@ -227,12 +225,13 @@ class ProductController extends Controller
                 $body["description"] = $request->description;
                 $body["price"] = Str::of($request->price)->replace(',', '') ?: 0;
                 $body["stock"] = Str::of($request->stock)->replace(',', '') ?: 0;
+                $body["updated_at"] = now();
+                $body["created_at"] = now();
                 $body["photo"] = $file;
                 $body["user_id"] = 1;
                 $body=json_encode($body);
                 $response = $client->request('PATCH',$url,['body'=>$body]);
                 $URI_Response =json_decode($response->getBody(), true);
-                // dd($response->getStatusCode());
                 if($response->getStatusCode() == 200){
                     return response()->json([
                         'alert' => 'success',
@@ -259,7 +258,6 @@ class ProductController extends Controller
                 $body=json_encode($body);
                 $response = $client->request('PATCH',$url,['body'=>$body]);
                 $URI_Response = json_decode($response->getBody(), true);
-                // dd($response->getStatusCode());
                 if($response->getStatusCode() == 200){
                     return response()->json([
                         'alert' => 'success',

@@ -21,10 +21,9 @@ class Connection
 
     public function produks()
     {
-
         try {
             $url = "127.0.0.1:8001/api/produks";
-            // dd($check);
+
             $connect = new Client([
                 'base_uri' => $url,
             ]);
@@ -43,7 +42,7 @@ class Connection
     public function orders(){
         try {
             $url = "127.0.0.1:8003/api/orders";
-            // dd($check);
+
             $connect = new Client([
                 'base_uri' => $url,
             ]);
@@ -52,16 +51,52 @@ class Connection
             $response = $response->data;
             return $response;
         } catch (ConnectException $e) {
-            // dd($e);
+
         } catch (Exception $e) {
-            // return $e;
-            // dd($e);
+
         }
     }
+
+    public function ordersCollection(){
+        try {
+            $url = "127.0.0.1:8003/api/orders";
+            $connect = new Client([
+                'base_uri' => $url,
+            ]);
+            $response = $connect->request('GET');
+            $response =  collect(json_decode($response->getBody(), true));
+            $collect = collect($response['data']);
+            return $collect;
+        } catch (ConnectException $e) {
+
+        } catch (Exception $e) {
+
+        }
+    }
+
+    public function produksCollection()
+    {
+        try {
+            $url = "127.0.0.1:8001/api/produks";
+
+            $connect = new Client([
+                'base_uri' => $url,
+            ]);
+            $response = $connect->request('GET');
+            $response =  collect(json_decode($response->getBody(), true));
+            $collect = collect($response['data']);
+            return $collect;
+        } catch (ConnectException $e) {
+
+        } catch (Exception $e) {
+
+        }
+    }
+
     public function users(){
         try {
             $url = "127.0.0.1:8002/api/all";
-            // dd($check);
+
             $connect = new Client([
                 'base_uri' => $url,
             ]);
@@ -70,16 +105,14 @@ class Connection
             $response = $response->data;
             return $response;
         } catch (ConnectException $e) {
-            // dd($e);
+
         } catch (Exception $e) {
-            // return $e;
-            // dd($e);
+
         }
     }
     public function gallery(){
         try {
             $url = "127.0.0.1:8004/api/gallery";
-            // dd($check);
             $connect = new Client([
                 'base_uri' => $url,
             ]);
@@ -88,10 +121,9 @@ class Connection
             $response = $response->data;
             return $response;
         } catch (ConnectException $e) {
-            // dd($e);
+
         } catch (Exception $e) {
-            // return $e;
-            // dd($e);
+
         }
     }
 }

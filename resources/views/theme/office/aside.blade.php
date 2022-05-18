@@ -98,7 +98,7 @@
                         </div>
                     </div>
                 </div>
-                <div data-kt-menu-trigger="click" class="menu-item {{request()->is('office/customer') || request()->is('office/employee') ? 'here show' : ''}} menu-accordion">
+                <div data-kt-menu-trigger="click" class="menu-item {{request()->is('office/user')  ? 'here show' : ''}} menu-accordion">
                     <span class="menu-link">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-2">
@@ -115,7 +115,7 @@
                         <span class="menu-title">User</span>
                         <span class="menu-arrow"></span>
                     </span>
-                    <div class="menu-sub menu-sub-accordion {{request()->is('office/customer') || request()->is('office/employee') ? 'menu-active-bg' : ''}}">
+                    <div class="menu-sub menu-sub-accordion {{request()->is('office/user') ? 'menu-active-bg' : ''}}">
                         <div class="menu-item">
                             <a class="menu-link {{request()->is('office/user') ? 'active' : ''}}" href="{{route('office.user.index')}}">
                                 <span class="menu-bullet">

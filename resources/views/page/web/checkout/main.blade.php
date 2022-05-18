@@ -50,9 +50,9 @@
                                                 </a>
                                             </td>
                                             
-                                            <td class="cart-product-name">
+                                            {{-- <td class="cart-product-name">
                                                 <a href="{{route('web.product.show',$item->id)}}">{{$collection->where('id',$item->product_id)}}</a>
-                                            </td>
+                                            </td> --}}
 
                                             <td class="cart-product-quantity">
                                                 <div class="quantity clearfix">

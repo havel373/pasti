@@ -22,7 +22,6 @@ class GalleryController extends Controller
     {
         $this->middleware(function($request, $next){
             $session = Session::get('admin');
-            // dd($session);
             if(!$session){
                 return response()->view('page.office.auth.main');
             }
@@ -93,7 +92,6 @@ class GalleryController extends Controller
                 "email" => $request->email,
                 "photo" => $file,
             ]);
-            // dd($store);
             if($store->getStatusCode() == 201){
                 return response()->json([
                     'alert' => 'success',
@@ -185,7 +183,7 @@ class GalleryController extends Controller
                 ]);
             } 
         }
-        $data = Http::get("127.0.0.1:8001/api/gallery/{$gallery}")->json(['data']);
+        $data = Http::get("127.0.0.1:8004/api/gallery/{$gallery}")->json(['data']);
         $item = (object) $data;
         $id = (int) $request->id;
         try {
@@ -198,8 +196,8 @@ class GalleryController extends Controller
                 ]);
             $url =  "127.0.0.1:8004/api/gallery/{$gallery}";
             if (request()->file('photo')) {
-                Storage::delete($item->photo);
                 $file = request()->file('photo')->store("gallery");
+                Storage::delete($request->photo);
                 $body["nama"] = Str::title($request->nama);
                 $body["nim"] = $request->nim;
                 $body["email"] = $request->email;
@@ -207,7 +205,6 @@ class GalleryController extends Controller
                 $body=json_encode($body);
                 $response = $client->request('PATCH',$url,['body'=>$body]);
                 $URI_Response =json_decode($response->getBody(), true);
-                // dd($response->getStatusCode());
                 if($response->getStatusCode() == 422){
                     return response()->json([
                         'alert' => 'error',

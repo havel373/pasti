@@ -1,19 +1,34 @@
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
+            <th>No</th>
             <th>Time</th>
             <th>Item</th>
+            <th>Alamat</th>
+            <th>Kode Post</th>
+            <th>Resi</th>
+            <th>Ongkir</th>
             <th>Total</th>
             <th>Status</th>
-            <th>Action</th>
         </tr>
     </thead>
     <tbody>
-        @foreach ($collection as $item)
         @php
-        $total = 0;
+            $i = 1;
         @endphp
+        @foreach ($collection as $item)
         <tr>
+            <td>{{$i++}}</td>
+            <td>{{$item['created_at']}}</td>
+            <td>{{$item['product_id']}}</td>
+            <td>{{$item['address']}}</td>
+            <td>{{$item['postcode']}}</td>
+            <td>{{$item['resi']}}</td>
+            <td>{{$item['ongkir']}}</td>
+            <td>{{$item['total']}}</td>
+            <td>{{$item['status']}}</td>
+        </tr>
+        {{-- <tr>
             <td>
                 <code>{{$item->created_at->diffForHumans()}}</code>
             </td>
@@ -54,8 +69,9 @@
                     @endif
                 @endif
             </td>
-        </tr>
+        </tr> --}}
         @endforeach
+        {{die;}}
     </tbody>
 </table>
-{{$collection->links()}}
+{{-- {{$collection->links()}} --}}

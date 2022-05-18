@@ -5,39 +5,29 @@
             <th class="w-25px">
                 No
             </th>
-            {{-- <th class="min-w-100px">Customer</th> --}}
-            <th class="min-w-150px">Alamat</th>
-            <th class="min-w-100px">Bukti Transfer</th>
+            <th class="min-w-100px">Customer</th>
+            <th class="min-w-150px">Address</th>
+            <th class="min-w-100px">Item</th>
             <th class="min-w-100px">Status</th>
-            <th class="min-w-100px">Resi</th>
-            <th class="min-w-100px">Ongkir</th>
-            <th class="min-w-100px">Kuantitas</th>
-            <th class="min-w-100px">Catatan</th>
+            <th class="min-w-100px">Total</th>
+            <th class="min-w-100px">Tanggal</th>
             <th class="min-w-150px text-end">Actions</th>
         </tr>
     </thead>
     <!--end::Table head-->
     <!--begin::Table body-->
     <tbody>
-        @if ($collection->count()>0)
+        @if ($collection->count() > 0)
             @foreach ($collection as $key => $item)
             <tr>
                 <td>
                     {{$key+1}}
                 </td>
-                {{-- <td>
-                    <div class="d-flex align-items-center">
-                        <div class="d-flex justify-content-start flex-column">
-                            <a href="javascript:;" class="text-dark fw-bolder text-hover-primary fs-6">{{$item->name}}</a>
-                            <span class="text-muted fw-bold text-muted d-block fs-7">{{$item->phone}} | {{$item->email}}</span>
-                        </div>
-                    </div>
-                </td> --}}
                 <td>
                     <div class="d-flex align-items-center">
                         <div class="d-flex justify-content-start flex-column">
-                            <a href="javascript:;" class="text-dark fw-bolder text-hover-primary fs-6">{{$item->address}}</a>
-                            <span class="text-muted fw-bold text-muted d-block fs-7">Kode Pos : {{$item->postcode}}</span>
+                            <a href="javascript:;" class="text-dark fw-bolder text-hover-primary fs-6"></a>
+                            <span class="text-muted fw-bold text-muted d-block fs-7">{{$item->user_id}}</span>
                         </div>
                     </div>
                 </td>
@@ -45,21 +35,7 @@
                     <div class="d-flex align-items-center">
                         <div class="d-flex justify-content-start flex-column">
                             <a href="javascript:;" class="text-dark fw-bolder text-hover-primary fs-6"></a>
-                            <span class="text-muted fw-bold text-muted d-block fs-7">{{$item->photo}}</span>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                <div class="d-flex align-items-center">
-                        <div class="d-flex justify-content-start flex-column">
-                            <a href="javascript:;" class="text-dark fw-bolder text-hover-primary fs-6">{{$item->status}}</a>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <div class="d-flex align-items-center">
-                        <div class="d-flex justify-content-start flex-column">
-                            <a href="javascript:;" class="text-dark fw-bolder text-hover-primary fs-6">{{$item->resi}}</a>
+                            <span class="text-muted fw-bold text-muted d-block fs-7">{{$item->address}}</span>
                         </div>
                     </div>
                 </td>
@@ -67,7 +43,7 @@
                     <div class="d-flex align-items-center">
                         <div class="d-flex justify-content-start flex-column">
                             <a href="javascript:;" class="text-dark fw-bolder text-hover-primary fs-6"></a>
-                            <span class="text-muted fw-bold text-muted d-block fs-7">Rp {{number_format($item->ongkir)}}</span>
+                            <span class="text-muted fw-bold text-muted d-block fs-7">{{$item->product_id}}</span>
                         </div>
                     </div>
                 </td>
@@ -75,44 +51,34 @@
                     <div class="d-flex align-items-center">
                         <div class="d-flex justify-content-start flex-column">
                             <a href="javascript:;" class="text-dark fw-bolder text-hover-primary fs-6"></a>
-                            <span class="text-muted fw-bold text-muted d-block fs-7">{{$item->total}}</span>
+                            <span class="text-muted fw-bold text-muted d-block fs-7">{{$item->status}}</span>
                         </div>
                     </div>
-                </td>
-                <td>
-                    {{-- @foreach ($item->order_detail as $produk)
-                    <div class="d-flex align-items-center">
-                        <div class="d-flex justify-content-start flex-column">
-                            <a href="javascript:;" class="text-dark fw-bolder text-hover-primary fs-6">{{$produk->titles}} | {{$produk->type}}</a>
-                            <span class="text-muted fw-bold text-muted d-block fs-7">{{number_format($produk->price)}} x {{number_format($produk->qty)}}</span>
-                            <span class="text-muted fw-bold text-muted d-block fs-7">{{number_format($produk->subtotal)}}</span>
-                        </div>
-                    </div>
-                    @endforeach --}}
-                    Notes : <span class="text-dark fw-bolder text-hover-primary fs-6">{{$item->notes}}</span>
                 </td>
                 <td class="text-end">
                     <div class="d-flex align-items-center">
                         <div class="d-flex justify-content-start flex-column">
-                            <a href="javascript:;" class="text-dark fw-bolder text-hover-primary fs-6">
-                                {{-- Rp.  {{number_format($item->total)}}  --}}
-                            </a>
+                            <a href="javascript:;" class="text-dark fw-bolder text-hover-primary fs-6">Rp. {{number_format($item->total)}}</a>
                         </div>
                     </div>
                 </td>
-                {{-- <td class="text-end">
+                <td class="text-end">
                     <div class="d-flex align-items-center">
                         <div class="d-flex justify-content-start flex-column">
-                            <a href="javascript:;" class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->created_at->format('j F Y') }} <br>{{$item->created_at->format('H:i:s')}} </a>
+                            <a href="javascript:;" class="text-dark fw-bolder text-hover-primary fs-6"> {{\Carbon\Carbon::parse($item->created_at)->diffForHumans()}}</a>
                         </div>
                     </div>
-                </td> --}}
+                </td>
                 <td class="text-end">
-                    {{-- @if ($item->status != "Wait for confirmation")
-                        <a href="{{route('office.order.invoice', $item->id)}}">Download Invoice</a>
-                    @endif    --}}
+                    @if ($item->status != "Wait for confirmation")
+                        <a 
+                        {{-- href="{{route('office.order.invoice', $item->id)}}" --}}
+                        >Download Invoice</a>
+                    @endif   
                     @if ($item->status == "Wait for confirmation")   
-                    <a href="{{route('office.order.download',$item->id)}}" target="_blank" class="btn btn-icon btn-light btn-hover-primary btn-sm">
+                    <a 
+                    {{-- href="{{route('office.order.download',$item->id)}}" target="_blank" --}}
+                     class="btn btn-icon btn-light btn-hover-primary btn-sm">
                         <span class="svg-icon svg-icon-md svg-icon-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -124,7 +90,8 @@
                             </svg>
                         </span>
                     </a> 
-                    <a href="javascript:;" onclick="handle_confirm('{{route('office.order.reject',$item->id)}}');" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+                    <a  href="javascript:;" onclick="handle_confirm('{{route('office.order.reject',$item->id)}}');"
+                     class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
                         <span class="svg-icon svg-icon-3">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -136,7 +103,9 @@
                             </svg>
                         </span>
                     </a>
-                    <a href="javascript:;" onclick="handle_confirm('{{route('office.order.acc',$item->id)}}');" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+                    <a 
+                    href="javascript:;" onclick="handle_confirm('{{route('office.order.acc',$item->id)}}');" 
+                    class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
                         <span class="svg-icon svg-icon-3">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -147,7 +116,9 @@
                         </span>
                     </a>
                     @elseif($item->status == "Order on process")
-                    <a href="javascript:;" onclick="load_input('{{route('office.order.edit',$item->id)}}');" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                    <a 
+                    {{-- href="javascript:;" onclick="load_input('{{route('office.order.edit',$item->id)}}');"  --}}
+                    class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
                         <span class="svg-icon svg-icon-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                 <path d="M12.2674799,18.2323597 L12.0084872,5.45852451 C12.0004303,5.06114792 12.1504154,4.6768183 12.4255037,4.38993949 L15.0030167,1.70195304 L17.5910752,4.40093695 C17.8599071,4.6812911 18.0095067,5.05499603 18.0083938,5.44341307 L17.9718262,18.2062508 C17.9694575,19.0329966 17.2985816,19.701953 16.4718324,19.701953 L13.7671717,19.701953 C12.9505952,19.701953 12.2840328,19.0487684 12.2674799,18.2323597 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.701953, 10.701953) rotate(-135.000000) translate(-14.701953, -10.701953)" />
@@ -155,11 +126,11 @@
                             </svg>
                         </span>
                     </a>
-                    @elseif($item->status == "Received")
+                    {{-- @elseif($item->st == "Received")
                         @if ($item->order_rates->count() > 0)
                         Review : {{$item->order_rates->first()->rates}}<br>
                         {{$item->order_rates->first()->review}}
-                        @endif
+                        @endif --}}
                     @endif
                 </td>
             </tr>

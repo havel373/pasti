@@ -16,28 +16,31 @@
                     <!-- Top Search ============================================= -->
                     <!-- #top-search end -->
                     <!-- Top Cart ============================================= -->
-                    @if(\Session::get('token'))
+                    {{-- @if(\Session::get('token'))
                     <div id="top-cart" class="header-misc-icon d-block d-sm-block">
                         <a href="{{route('web.checkout.index')}}">
                             <i class="icon-line-bag"></i>
                             <span class="top-cart-number"></span>
                         </a>
                     </div>
-                    {{-- <div class="dropdown mx-3 me-lg-0">
+                    <div class="dropdown mx-3 me-lg-0">
                         <a href="javascript:;" class="btn btn-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="icon-user"></i></a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenu1">
                             <a class="dropdown-item text-start" href="{{route('web.auth.profile')}}">Profile</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-start" href="{{route('web.auth.logout')}}">Logout <i class="icon-signout"></i></a>
                         </ul>
-                    </div> --}}
-                    @endif
+                    </div>
+                    @endif --}}
                     @if(\Session::get('token'))
-                    <a href="{{route('web.auth.logout')}}" class="button button-mini button-border button-rounded">
-                        <span>
-                            Logout
-                        </span>
-                    </a>
+                    <div class="dropdown mx-3 me-lg-0">
+                        <a href="javascript:;" class="btn btn-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="icon-user"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenu1">
+                            <a class="dropdown-item text-start" href="{{route('web.auth.profile')}}">Profile</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-start" href="{{route('web.auth.logout')}}">Logout <i class="icon-signout"></i></a>
+                        </ul>
+                    </div>
                     @else
                     <a href="{{route('web.auth.index')}}" class="button button-mini button-border button-rounded">
                         <span>

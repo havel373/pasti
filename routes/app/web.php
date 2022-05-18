@@ -23,8 +23,10 @@ Route::group(['domain' => ''], function() {
         Route::get('home', [WebController::class, 'index'])->name('home');
         Route::get('about', [WebController::class, 'about'])->name('about');
         Route::get('auth',[AuthController::class, 'index'])->name('auth.index');
+        Route::get('profile/{user:id}/edit',[AuthController::class, 'edit_profile'])->name('auth.edit');
         Route::prefix('auth/')->name('auth.')->group(function(){
             Route::post('login',[AuthController::class, 'do_login'])->name('login');
+            Route::get('profile',[AuthController::class, 'profile'])->name('profile');
             Route::post('register',[AuthController::class, 'do_register'])->name('register');
         });
         Route::resource('product', ProductController::class);
